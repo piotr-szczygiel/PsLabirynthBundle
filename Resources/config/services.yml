@@ -1,0 +1,8 @@
+services:
+
+  ps_labyrinth.reader:
+    class: Ps\LabyrinthBundle\Labyrinth\Reader
+
+  ps_labyrinth.solver:
+    class: Ps\LabyrinthBundle\Labyrinth\Solver
+    arguments: [@ps_labyrinth.reader]
