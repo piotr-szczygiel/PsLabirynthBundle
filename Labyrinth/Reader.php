@@ -74,8 +74,12 @@ class Reader
                 $role = Tile::ROLE_END;
                 break;
 
+            case '.':
+                $role = Tile::ROLE_PATH;
+                break;
+
             default:
-                $role = Tile::ROLE_PLAIN;
+                $role = Tile::ROLE_WALL;
                 break;
         }
 

@@ -20,7 +20,12 @@ class Tile
     /**
      * @var string
      */
-    const ROLE_PLAIN = 'plain';
+    const ROLE_PATH = 'path';
+
+    /**
+     * @var string
+     */
+    const ROLE_WALL = 'wall';
 
     /**
      * @var string
@@ -84,5 +89,13 @@ class Tile
         $this->role = $role;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 } 
