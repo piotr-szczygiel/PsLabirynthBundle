@@ -34,6 +34,15 @@ abstract class Tile
     }
 
     /**
+     * Getter for X
+     * @return int
+     */
+    public function getX()
+    {
+        return $this->x;
+    }
+
+    /**
      * @param int $y
      * @return $this
      */
@@ -45,6 +54,15 @@ abstract class Tile
     }
 
     /**
+     * Getter for Y
+     * @return int
+     */
+    public function getY()
+    {
+        return $this->y;
+    }
+
+    /**
      * @param int $newCounter
      * @return $this
      */
@@ -53,5 +71,14 @@ abstract class Tile
         $this->counter = $newCounter;
 
         return $this;
+    }
+
+    /**
+     * Getter for counter
+     * @return int
+     */
+    public function getCounter()
+    {
+        return $this->counter;
     }
 } 

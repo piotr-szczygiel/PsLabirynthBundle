@@ -1,12 +1,15 @@
 services:
 
-  ps_labyrinth.reader:
+  ps_labyrinth.labyrinth.reader:
     class: Ps\LabyrinthBundle\Labyrinth\Reader
     arguments: [@ps_labyrinth.factory.tile]
 
-  ps_labyrinth.solver:
+  ps_labyrinth.labyrinth.solver:
     class: Ps\LabyrinthBundle\Labyrinth\Solver
-    arguments: [@ps_labyrinth.reader]
+    arguments: [@ps_labyrinth.labyrinth.reader, @ps_labyrinth.labyrinth.queue]
+
+  ps_labyrinth.labyrinth.queue:
+    class: Ps\LabyrinthBundle\Labyrinth\Queue
 
   ps_labyrinth.factory.tile:
     class: Ps\LabyrinthBundle\Factory\TileFactory

@@ -28,7 +28,7 @@ class LabyrinthSolverCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $solver = $this->getContainer()->get('ps_labyrinth.solver');
+        $solver = $this->getContainer()->get('ps_labyrinth.labyrinth.solver');
         $solver->solve($input->getArgument('file'));
 
         $output->writeln(sprintf('Hello <comment>%s</comment>!', $input->getArgument('file')));

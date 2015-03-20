@@ -1,8 +1,9 @@
 <?php
 namespace Ps\LabyrinthBundle\Labyrinth;
 
-use Ps\LabyrinthBundle\Model\Tile;
+use Ps\LabyrinthBundle\Model\Labyrinth;
 use Ps\LabyrinthBundle\Factory\TileFactory;
+use Ps\LabyrinthBundle\Model\Tile;
 
 /**
  * Class Reader
@@ -24,21 +25,24 @@ class Reader
     }
 
     /**
-     * Reads given file and returns a multi-dimensional array of Tile objects
+     * Reads given file and returns a Labyrinth model object
      * @param string $filePath
-     * @return Tile[][]
+     * @return Labyrinth
      */
-    public function getLabyrinthArray($filePath)
+    public function getLabyrinth($filePath)
     {
-        $labyrinthArray = array();
+        $tiles = array();
         $fileContent = file($filePath);
 
         foreach($fileContent as $line) {
-            $labyrinthArray[] = explode(' ', $line);
+            $tiles[] = explode(' ', trim($line));
         }
 
-        $labyrinthArray = $this->fillWithObjects($labyrinthArray);
-        return $labyrinthArray;
+        $tiles = $this->fillWithObjects($tiles);
+        $labyrinth = new Labyrinth();
+        $labyrinth->setTiles($tiles);
+
+        return $labyrinth;
     }
 
     /**

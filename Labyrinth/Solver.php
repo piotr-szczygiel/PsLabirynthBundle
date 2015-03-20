@@ -1,6 +1,8 @@
 <?php
 namespace Ps\LabyrinthBundle\Labyrinth;
 
+use Ps\LabyrinthBundle\Model\EndTile;
+use Ps\LabyrinthBundle\Model\Labyrinth;
 use Ps\LabyrinthBundle\Model\StartTile;
 use Ps\LabyrinthBundle\Model\Tile;
 
@@ -16,11 +18,18 @@ class Solver
     private $reader;
 
     /**
-     * @param Reader $reader
+     * @var Queue
      */
-    public function __construct(Reader $reader)
+    private $queue;
+
+    /**
+     * @param Reader $reader
+     * @param Queue $queue
+     */
+    public function __construct(Reader $reader, Queue $queue)
     {
         $this->reader = $reader;
+        $this->queue = $queue;
     }
 
     /**
@@ -29,32 +38,35 @@ class Solver
      */
     public function solve($filePath)
     {
-        $labyrinthArray = $this->reader->getLabyrinthArray($filePath);
-        $startTile = $this->findStart($labyrinthArray);
+        $labyrinth = $this->reader->getLabyrinth($filePath);
 
+        $start = $labyrinth->getStart();
+        $start->setCounter(1);
+        $this->queue->push($start);
+
+
+        $endTile = $this->stepForward($labyrinth);
         print '<pre>';
-        print_r($startTile);
+        var_dump($endTile);
         print '</pre>';
+
     }
 
-    /**
-     * Returns the start Tile
-     * @param Tile[] $labyrinthArray
-     * @return StartTile
-     * @throws \Exception
-     */
-    private function findStart(array $labyrinthArray)
+    private function stepForward(Labyrinth $labyrinth)
     {
-        foreach ($labyrinthArray as $row) {
+        $tile = $this->queue->getAndShift();
+        if ($tile instanceof EndTile) {
 
-            foreach ($row as $tile) {
-
-                if ($tile instanceof StartTile) {
-                    return $tile;
-                }
-            }
+            return $tile;
         }
 
-        throw new \Exception('Labyrinth does not contain a start point.');
+        $paths = $labyrinth->getPossiblePaths($tile);
+        foreach ($paths as $path) {
+
+            $path->setCounter($tile->getCounter()+1);
+            $this->queue->push($path);
+        }
+
+        return $this->stepForward($labyrinth);
     }
 } 
