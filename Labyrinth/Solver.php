@@ -1,5 +1,7 @@
 <?php
 namespace Ps\LabyrinthBundle\Labyrinth;
+
+use Ps\LabyrinthBundle\Model\StartTile;
 use Ps\LabyrinthBundle\Model\Tile;
 
 /**
@@ -21,6 +23,10 @@ class Solver
         $this->reader = $reader;
     }
 
+    /**
+     * @param string $filePath
+     * @throws \Exception
+     */
     public function solve($filePath)
     {
         $labyrinthArray = $this->reader->getLabyrinthArray($filePath);
@@ -34,7 +40,7 @@ class Solver
     /**
      * Returns the start Tile
      * @param Tile[] $labyrinthArray
-     * @return Tile
+     * @return StartTile
      * @throws \Exception
      */
     private function findStart(array $labyrinthArray)
@@ -43,8 +49,7 @@ class Solver
 
             foreach ($row as $tile) {
 
-                if ($tile->getRole() === Tile::ROLE_START) {
-
+                if ($tile instanceof StartTile) {
                     return $tile;
                 }
             }

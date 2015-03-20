@@ -1,6 +1,8 @@
 <?php
 namespace Ps\LabyrinthBundle\Labyrinth;
+
 use Ps\LabyrinthBundle\Model\Tile;
+use Ps\LabyrinthBundle\Factory\TileFactory;
 
 /**
  * Class Reader
@@ -8,6 +10,19 @@ use Ps\LabyrinthBundle\Model\Tile;
  */
 class Reader
 {
+    /**
+     * @var TileFactory
+     */
+    private $tileFactory;
+
+    /**
+     * @param TileFactory $tileFactory
+     */
+    public function __construct(TileFactory $tileFactory)
+    {
+        $this->tileFactory = $tileFactory;
+    }
+
     /**
      * Reads given file and returns a multi-dimensional array of Tile objects
      * @param string $filePath
@@ -33,56 +48,18 @@ class Reader
      */
     private function fillWithObjects(array $labyrinthArray)
     {
-        $sampleTile = new Tile();
-        $sampleTile->setCounter(0);
         $tilesArray = array();
-
         foreach ($labyrinthArray as $x => $row) {
 
             foreach ($row as $y => $character) {
 
-                $tile = clone $sampleTile;
-                $tile
-                    ->setRole($this->getRole($character))
-                    ->setX($x)
-                    ->setY($y)
-                ;
+                $tile = $this->tileFactory->getTile($character);
+                $tile->setX($x)->setY($y);
 
                 $tilesArray[$x][$y] = $tile;
             }
         }
 
         return $tilesArray;
-    }
-
-    /**
-     * Maps characters into proper roles
-     * @param string $character
-     * @return string
-     */
-    private function getRole($character)
-    {
-        switch ($character) {
-
-            case 'S':
-            case 's':
-                $role = Tile::ROLE_START;
-                break;
-
-            case 'E':
-            case 'e':
-                $role = Tile::ROLE_END;
-                break;
-
-            case '.':
-                $role = Tile::ROLE_PATH;
-                break;
-
-            default:
-                $role = Tile::ROLE_WALL;
-                break;
-        }
-
-        return $role;
     }
 } 

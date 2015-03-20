@@ -5,47 +5,22 @@ namespace Ps\LabyrinthBundle\Model;
  * Class Tile
  * @package Ps\LabyrinthBundle\Model
  */
-class Tile
+abstract class Tile
 {
     /**
-     * @var string
+     * @var int
      */
-    const ROLE_START = 'start';
-
-    /**
-     * @var string
-     */
-    const ROLE_END = 'end';
-
-    /**
-     * @var string
-     */
-    const ROLE_PATH = 'path';
-
-    /**
-     * @var string
-     */
-    const ROLE_WALL = 'wall';
-
-    /**
-     * @var string
-     */
-    private $role;
+    protected $counter = 0;
 
     /**
      * @var int
      */
-    private $counter;
+    protected $x;
 
     /**
      * @var int
      */
-    private $x;
-
-    /**
-     * @var int
-     */
-    private $y;
+    protected $y;
 
     /**
      * @param int $x
@@ -78,24 +53,5 @@ class Tile
         $this->counter = $newCounter;
 
         return $this;
-    }
-
-    /**
-     * @param string $role
-     * @return $this
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 } 
