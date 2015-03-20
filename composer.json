@@ -1,8 +1,8 @@
 {
-  "name": "piotr-szczygiel/PsLabirynthBundle",
+  "name": "piotr-szczygiel/PsLabyrinthBundle",
   "type": "symfony-bundle",
   "description": "Bundle that provides a command which finds the path in a custom labyrinth",
-  "homepage": "https://github.com/piotr-szczygiel/PsLabirynthBundle",
+  "homepage": "https://github.com/piotr-szczygiel/PsLabyrinthBundle",
   "keywords": ["labyrinth", "path"],
   "license": "MIT",
   "authors": [
