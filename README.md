@@ -4,7 +4,7 @@ Include following code into your composer.json file:
 
 ```json
 "require": {
-    "piotr-szczygiel/PsLabyrinthBundle": "dev-master"
+    "piotr-szczygiel/labyrinth-bundle": "dev-master"
 },    
 "repositories": [
     {
@@ -14,5 +14,5 @@ Include following code into your composer.json file:
 ]
 ```
 
-How to run it:
+How to run it:  
 ```$php app/console labyrinth:solve /var/www/symfony/vendor/piotr-szczygiel/PsLabyrinthBundle/Resources/doc/lab.txt```
