@@ -3,7 +3,6 @@ namespace Ps\LabyrinthBundle\Labyrinth;
 
 use Ps\LabyrinthBundle\Model\Labyrinth;
 use Ps\LabyrinthBundle\Factory\TileFactory;
-use Ps\LabyrinthBundle\Model\Tile;
 
 /**
  * Class Reader
@@ -35,35 +34,12 @@ class Reader
         $fileContent = file($filePath);
 
         foreach($fileContent as $line) {
-            $tiles[] = explode(' ', trim($line));
+            $tiles[] = trim($line);
         }
 
-        $tiles = $this->fillWithObjects($tiles);
-        $labyrinth = new Labyrinth();
+        $labyrinth = new Labyrinth($this->tileFactory);
         $labyrinth->setTiles($tiles);
 
         return $labyrinth;
-    }
-
-    /**
-     * Fills given labyrinth array with Tile objects
-     * @param array $labyrinthArray
-     * @return Tile[][]
-     */
-    private function fillWithObjects(array $labyrinthArray)
-    {
-        $tilesArray = array();
-        foreach ($labyrinthArray as $x => $row) {
-
-            foreach ($row as $y => $character) {
-
-                $tile = $this->tileFactory->getTile($character);
-                $tile->setX($x)->setY($y);
-
-                $tilesArray[$x][$y] = $tile;
-            }
-        }
-
-        return $tilesArray;
     }
 } 

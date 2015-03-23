@@ -4,8 +4,6 @@ namespace Ps\LabyrinthBundle\Factory;
 use Ps\LabyrinthBundle\Model\EndTile;
 use Ps\LabyrinthBundle\Model\PathTile;
 use Ps\LabyrinthBundle\Model\StartTile;
-use Ps\LabyrinthBundle\Model\Tile;
-use Ps\LabyrinthBundle\Model\WallTile;
 
 /**
  * Class TileFactory
@@ -14,29 +12,29 @@ use Ps\LabyrinthBundle\Model\WallTile;
 class TileFactory
 {
     /**
-     * @param $char
-     * @returns Tile
+     * Getter method for the factory
+     * @param string $char
+     * @throws \Exception
+     * @returns \Ps\LabyrinthBundle\Model\Tile
      */
     public function getTile($char)
     {
         switch ($char) {
 
-            case 'S':
-            case 's':
+            case StartTile::CHAR:
                 $tile = new StartTile();
                 break;
 
-            case 'E':
-            case 'e':
+            case EndTile::CHAR:
                 $tile = new EndTile();
                 break;
 
-            case '.':
+            case PathTile::CHAR:
                 $tile = new PathTile();
                 break;
 
             default:
-                $tile = new WallTile();
+                throw new \Exception('Unrecognized labyrinth character: "' . $char . '"');
                 break;
         }
 

@@ -23,6 +23,121 @@ abstract class Tile
     protected $y;
 
     /**
+     * @var bool
+     */
+    protected $winner = false;
+
+    /**
+     * @var bool
+     */
+    protected $topWall;
+
+    /**
+     * @var bool
+     */
+    protected $rightWall;
+
+    /**
+     * @var bool
+     */
+    protected $bottomWall;
+
+    /**
+     * @var bool
+     */
+    protected $leftWall;
+
+    /**
+     * Returns a character that represents the object in a textual version of labyrinth
+     * @return string
+     */
+    abstract public function getTypeChar();
+
+    /**
+     * Setter for topWall
+     * @param bool $topWall
+     * @return $this
+     */
+    public function setTopWall($topWall)
+    {
+        $this->topWall = $topWall;
+
+        return $this;
+    }
+
+    /**
+     * Setter for rightWall
+     * @param bool $rightWall
+     * @return $this
+     */
+    public function setRightWall($rightWall)
+    {
+        $this->rightWall = $rightWall;
+
+        return $this;
+    }
+
+    /**
+     * Setter for bottomWall
+     * @param bool $bottomWall
+     * @return $this
+     */
+    public function setBottomWall($bottomWall)
+    {
+        $this->bottomWall = $bottomWall;
+
+        return $this;
+    }
+
+    /**
+     * Setter for leftWall
+     * @param bool $leftWall
+     * @return $this
+     */
+    public function setLeftWall($leftWall)
+    {
+        $this->leftWall = $leftWall;
+
+        return $this;
+    }
+
+    /**
+     * Getter for topWall
+     * @return bool
+     */
+    public function getTopWall()
+    {
+        return $this->topWall;
+    }
+
+    /**
+     * Getter for rightWall
+     * @return bool
+     */
+    public function getRightWall()
+    {
+        return $this->rightWall;
+    }
+
+    /**
+     * Getter for bottomWall
+     * @return bool
+     */
+    public function getBottomWall()
+    {
+        return $this->bottomWall;
+    }
+
+    /**
+     * Getter for leftWall
+     * @return bool
+     */
+    public function getLeftWall()
+    {
+        return $this->leftWall;
+    }
+
+    /**
      * @param int $x
      * @return $this
      */
@@ -80,5 +195,21 @@ abstract class Tile
     public function getCounter()
     {
         return $this->counter;
+    }
+
+    /**
+     * @param bool $winner
+     * @return $this
+     */
+    public function setWinner($winner)
+    {
+        $this->winner = $winner;
+
+        return $this;
+    }
+
+    public function getWinner()
+    {
+        return $this->winner;
     }
 } 

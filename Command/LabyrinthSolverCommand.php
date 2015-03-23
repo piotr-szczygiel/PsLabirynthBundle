@@ -1,6 +1,7 @@
 <?php
 namespace Ps\LabyrinthBundle\Command;
 
+use Ps\LabyrinthBundle\Model\Labyrinth;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,8 +30,45 @@ class LabyrinthSolverCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $solver = $this->getContainer()->get('ps_labyrinth.labyrinth.solver');
-        $solver->solve($input->getArgument('file'));
+        $labyrinth = $solver->solve($input->getArgument('file'));
 
-        $output->writeln(sprintf('Hello <comment>%s</comment>!', $input->getArgument('file')));
+        $this->dumpLabyrinth($labyrinth, $output);
+    }
+
+    /**
+     * Prints out the labyrinth with marked path
+     * @param Labyrinth $labyrinth
+     * @param OutputInterface $output
+     * @return $this
+     */
+    private function dumpLabyrinth(Labyrinth $labyrinth, OutputInterface $output)
+    {
+        foreach ($labyrinth->getTextTiles() as $y => $row) {
+
+            if ($y % 2 === 0) {
+
+                $output->writeln($row);
+            }
+            else {
+
+                for ($x = 0; $x < strlen($row); $x++) {
+
+                    if ($x % 2 === 0) {
+
+                        $output->write($row[$x]);
+                    }
+                    else {
+
+                        $tile = $labyrinth->getTile($y, $x);
+                        $color = $tile->getWinner() ? 'red' : 'white';
+                        $output->write('<fg=' . $color . '>' . $tile->getTypeChar() . '</fg=' . $color . '>');
+                    }
+                }
+
+                $output->writeln('');
+            }
+        }
+
+        return $this;
     }
 } 

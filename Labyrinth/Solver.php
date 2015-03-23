@@ -3,8 +3,6 @@ namespace Ps\LabyrinthBundle\Labyrinth;
 
 use Ps\LabyrinthBundle\Model\EndTile;
 use Ps\LabyrinthBundle\Model\Labyrinth;
-use Ps\LabyrinthBundle\Model\StartTile;
-use Ps\LabyrinthBundle\Model\Tile;
 
 /**
  * Class Solver
@@ -35,6 +33,7 @@ class Solver
     /**
      * @param string $filePath
      * @throws \Exception
+     * @returns Labyrinth
      */
     public function solve($filePath)
     {
@@ -44,14 +43,17 @@ class Solver
         $start->setCounter(1);
         $this->queue->push($start);
 
-
         $endTile = $this->stepForward($labyrinth);
-        print '<pre>';
-        var_dump($endTile);
-        print '</pre>';
+        $labyrinth->markWinningPath($endTile);
 
+        return $labyrinth;
     }
 
+    /**
+     * Recurrent function that makes a step in the labyrinth
+     * @param Labyrinth $labyrinth
+     * @return \Ps\LabyrinthBundle\Model\Tile
+     */
     private function stepForward(Labyrinth $labyrinth)
     {
         $tile = $this->queue->getAndShift();

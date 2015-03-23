@@ -1,5 +1,6 @@
 <?php
 namespace Ps\LabyrinthBundle\Model;
+use Ps\LabyrinthBundle\Factory\TileFactory;
 
 /**
  * Class Labyrinth
@@ -8,9 +9,27 @@ namespace Ps\LabyrinthBundle\Model;
 class Labyrinth
 {
     /**
-     * @var Tile[]
+     * @var Tile[][]
      */
     private $tiles = array();
+
+    /**
+     * @var TileFactory
+     */
+    private $tileFactory;
+
+    /**
+     * @var array
+     */
+    private $textTiles;
+
+    /**
+     * @param TileFactory $tileFactory
+     */
+    public function __construct(TileFactory $tileFactory)
+    {
+        $this->tileFactory = $tileFactory;
+    }
 
     /**
      * @param array $tiles
@@ -18,9 +37,44 @@ class Labyrinth
      */
     public function setTiles(array $tiles)
     {
-        $this->tiles = $tiles;
+        $this->textTiles = $tiles;
 
-        return $tiles;
+        for ($y=1; $y < sizeof($this->textTiles); $y+=2) {
+
+            for($x=1; $x < strlen($this->textTiles[$y]); $x+=2) {
+
+                $tile = $this->tileFactory->getTile($this->textTiles[$y][$x]);
+                $tile
+                    ->setX($x)->setY($y)
+                    ->setTopWall($this->textTiles[$y-1][$x] !== ' ')
+                    ->setRightWall($this->textTiles[$y][$x+1] !== ' ')
+                    ->setBottomWall($this->textTiles[$y+1][$x] !== ' ')
+                    ->setLeftWall($this->textTiles[$y][$x-1] !== ' ')
+                ;
+
+                $this->tiles[$y][$x] = $tile;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Getter for tiles
+     * @return Tile[][]
+     */
+    public function getTiles()
+    {
+        return $this->tiles;
+    }
+
+    /**
+     * Getter for text tiles
+     * @return array
+     */
+    public function getTextTiles()
+    {
+        return $this->textTiles;
     }
 
     /**
@@ -48,55 +102,70 @@ class Labyrinth
      * @param Tile $baseTile
      * @return Tile[]
      */
-    public function getPossiblePaths(Tile $baseTile)
+    public function getPossiblePaths(Tile $baseTile, $counter = 0)
     {
         $paths = array();
 
-        // check above tile
-        $aboveTile = $this->checkPathCorrectnes($baseTile->getX(), $baseTile->getY()-1, $baseTile);
-        if ($aboveTile instanceof Tile) {
-            $paths[] = $aboveTile;
+        if ($baseTile->getTopWall() === false) {
+
+            $tile = $this->tiles[$baseTile->getY()-2][$baseTile->getX()];
+            if ($tile->getCounter() === $counter) {
+                $paths[] = $tile;
+            }
         }
 
-        // check below tile
-        $belowTile = $this->checkPathCorrectnes($baseTile->getX(), $baseTile->getY()+1, $baseTile);
-        if ($belowTile instanceof Tile) {
-            $paths[] = $belowTile;
+        if ($baseTile->getRightWall() === false) {
+
+            $tile = $this->tiles[$baseTile->getY()][$baseTile->getX()+2];
+            if ($tile->getCounter() === $counter) {
+                $paths[] = $tile;
+            }
         }
 
-        // check right tile
-        $rightTile = $this->checkPathCorrectnes($baseTile->getX()+1, $baseTile->getY(), $baseTile);
-        if ($rightTile instanceof Tile) {
-            $paths[] = $rightTile;
+        if ($baseTile->getBottomWall() === false) {
+
+            $tile = $this->tiles[$baseTile->getY()+2][$baseTile->getX()];
+            if ($tile->getCounter() === $counter) {
+                $paths[] = $tile;
+            }
         }
 
-        // check left tile
-        $leftTile = $this->checkPathCorrectnes($baseTile->getX()-1, $baseTile->getY(), $baseTile);
-        if ($leftTile instanceof Tile) {
-            $paths[] = $leftTile;
+        if ($baseTile->getLeftWall() === false) {
+
+            $tile = $this->tiles[$baseTile->getY()][$baseTile->getX()-2];
+            if ($tile->getCounter() === $counter) {
+                $paths[] = $tile;
+            }
         }
 
         return $paths;
     }
 
     /**
-     * Validates given coordinates in order to get a correct path tile
-     * @param int $x
-     * @param int $y
-     * @return null|EndTile|PathTile
+     * Marks winning tiles with 'winner' flag
+     * @param Tile $tile
+     * @return $this
      */
-    private function checkPathCorrectnes($x, $y, Tile $baseTile)
+    public function markWinningPath(Tile $tile)
     {
-        $correctTile = null;
-        if (isset($this->tiles[$x][$y])) {
+        $tile->setWinner(true);
+        $paths = $this->getPossiblePaths($tile, $tile->getCounter() - 1);
 
-            $tile = $this->tiles[$x][$y];
-            if ($tile->getCounter() === 0 && ($tile instanceof PathTile || $tile instanceof EndTile)) {
-
-                $correctTile = $tile;
-            }
+        foreach ($paths as $path) {
+            $this->markWinningPath($path);
         }
 
-        return $correctTile;
+        return $this;
+    }
+
+    /**
+     * Returns a Tile object for given coordinates
+     * @param int $y
+     * @param int $x
+     * @return Tile
+     */
+    public function getTile($y, $x)
+    {
+        return $this->tiles[$y][$x];
     }
 }
