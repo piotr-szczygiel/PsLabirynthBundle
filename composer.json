@@ -1,5 +1,5 @@
 {
-  "name": "piotr-szczygiel/PsLabyrinthBundle",
+  "name": "piotr-szczygiel/labyrinth-bundle",
   "type": "symfony-bundle",
   "description": "Bundle that provides a command which finds the path in a custom labyrinth",
   "homepage": "https://github.com/piotr-szczygiel/PsLabyrinthBundle",
