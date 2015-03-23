@@ -33,7 +33,7 @@ class Labyrinth
 
     /**
      * @param array $tiles
-     * @return array
+     * @return $this
      */
     public function setTiles(array $tiles)
     {
@@ -100,6 +100,7 @@ class Labyrinth
     /**
      * Return all possible steps from given base tile
      * @param Tile $baseTile
+     * @param int $counter
      * @return Tile[]
      */
     public function getPossiblePaths(Tile $baseTile, $counter = 0)
