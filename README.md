@@ -17,4 +17,4 @@ $bundles = array(
 ```
 
 How to run it:  
-```$php app/console labyrinth:solve /var/www/symfony/vendor/piotr-szczygiel/PsLabyrinthBundle/Resources/doc/lab.txt```
+```$php app/console labyrinth:solve /var/www/symfony/vendor/piotr-szczygiel/labyrinth-bundle/Resources/doc/lab.txt```

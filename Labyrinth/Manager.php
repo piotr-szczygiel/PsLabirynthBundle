@@ -38,13 +38,10 @@ class Manager
      */
     public function getStart(Labyrinth $labyrinth)
     {
-        foreach ($labyrinth->getTiles() as $row) {
+        foreach ($labyrinth->getTiles() as $tile) {
 
-            foreach ($row as $tile) {
-
-                if ($tile instanceof StartTile) {
-                    return $tile;
-                }
+            if ($tile instanceof StartTile) {
+                return $tile;
             }
         }
 
@@ -61,11 +58,10 @@ class Manager
     public function getPossiblePaths(Labyrinth $labyrinth, Tile $baseTile, $counter = 0)
     {
         $paths = array();
-        $tiles = $labyrinth->getTiles();
 
         if ($baseTile->getTopWall() === false) {
 
-            $tile = $tiles[$baseTile->getY()-2][$baseTile->getX()];
+            $tile = $this->getTile($labyrinth, $baseTile->getY()-2, $baseTile->getX());
             if ($tile->getCounter() === $counter) {
                 $paths[] = $tile;
             }
@@ -73,7 +69,7 @@ class Manager
 
         if ($baseTile->getRightWall() === false) {
 
-            $tile = $tiles[$baseTile->getY()][$baseTile->getX()+2];
+            $tile = $this->getTile($labyrinth, $baseTile->getY(), $baseTile->getX()+2);
             if ($tile->getCounter() === $counter) {
                 $paths[] = $tile;
             }
@@ -81,7 +77,7 @@ class Manager
 
         if ($baseTile->getBottomWall() === false) {
 
-            $tile = $tiles[$baseTile->getY()+2][$baseTile->getX()];
+            $tile = $this->getTile($labyrinth, $baseTile->getY()+2, $baseTile->getX());
             if ($tile->getCounter() === $counter) {
                 $paths[] = $tile;
             }
@@ -89,7 +85,7 @@ class Manager
 
         if ($baseTile->getLeftWall() === false) {
 
-            $tile = $tiles[$baseTile->getY()][$baseTile->getX()-2];
+            $tile = $this->getTile($labyrinth, $baseTile->getY(), $baseTile->getX()-2);
             if ($tile->getCounter() === $counter) {
                 $paths[] = $tile;
             }
@@ -121,14 +117,20 @@ class Manager
      * @param Labyrinth $labyrinth
      * @param int $y
      * @param int $x
+     * @throws \Exception
      * @return Tile
      */
     public function getTile(Labyrinth $labyrinth, $y, $x)
     {
-        $tiles = $labyrinth->getTiles();
-        $tile = $tiles[$y][$x];
+        foreach ($labyrinth->getTiles() as $tile) {
 
-        return $tile;
+            if ($tile->getX() == $x && $tile->getY() == $y) {
+
+                return $tile;
+            }
+        }
+
+        throw new \Exception('Tile with coordinates [' . $x . ', ' . $y . '] doesn\'t exist.');
     }
 
     /**
@@ -154,7 +156,7 @@ class Manager
                     ->setLeftWall($this->textTiles[$y][$x-1] !== ' ')
                 ;
 
-                $tilesSet[$y][$x] = $tile;
+                $tilesSet[] = $tile;
             }
         }
 

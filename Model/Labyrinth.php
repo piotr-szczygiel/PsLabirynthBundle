@@ -8,13 +8,13 @@ namespace Ps\LabyrinthBundle\Model;
 class Labyrinth
 {
     /**
-     * @var Tile[][]
+     * @var Tile[]
      */
     private $tiles = array();
 
     /**
      * Getter for tiles
-     * @return Tile[][]
+     * @return Tile[]
      */
     public function getTiles()
     {
