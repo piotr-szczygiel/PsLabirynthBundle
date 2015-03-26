@@ -1,10 +1,10 @@
-# PsLabirynthBundle
+# PsLabirynthBundle 1.0.0
 
 Include following code into your composer.json file:
 
 ```json
 "require": {
-    "piotr-szczygiel/labyrinth-bundle": "dev-master"
+    "piotr-szczygiel/labyrinth-bundle": "1.*"
 }
 ```
 
