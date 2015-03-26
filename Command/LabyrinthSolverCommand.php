@@ -43,23 +43,20 @@ class LabyrinthSolverCommand extends ContainerAwareCommand
      */
     private function dumpLabyrinth(Labyrinth $labyrinth, OutputInterface $output)
     {
-        foreach ($labyrinth->getTextTiles() as $y => $row) {
+        $labyrinthManager = $this->getContainer()->get('ps_labyrinth.labyrinth.manager');
+        foreach ($labyrinthManager->getTextTiles() as $y => $row) {
 
             if ($y % 2 === 0) {
-
                 $output->writeln($row);
             }
             else {
-
                 for ($x = 0; $x < strlen($row); $x++) {
 
                     if ($x % 2 === 0) {
-
                         $output->write($row[$x]);
                     }
                     else {
-
-                        $tile = $labyrinth->getTile($y, $x);
+                        $tile = $labyrinthManager->getTile($labyrinth, $y, $x);
                         $color = $tile->getWinner() ? 'red' : 'white';
                         $output->write('<fg=' . $color . '>' . $tile->getTypeChar() . '</fg=' . $color . '>');
                     }

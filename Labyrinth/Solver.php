@@ -21,13 +21,20 @@ class Solver
     private $queue;
 
     /**
+     * @var Manager
+     */
+    private $manager;
+
+    /**
      * @param Reader $reader
      * @param Queue $queue
+     * @param Manager $manager
      */
-    public function __construct(Reader $reader, Queue $queue)
+    public function __construct(Reader $reader, Queue $queue, Manager $manager)
     {
         $this->reader = $reader;
         $this->queue = $queue;
+        $this->manager = $manager;
     }
 
     /**
@@ -37,14 +44,16 @@ class Solver
      */
     public function solve($filePath)
     {
-        $labyrinth = $this->reader->getLabyrinth($filePath);
+        $tiles = $this->reader->getLabyrinth($filePath);
+        $labyrinth = new Labyrinth();
+        $this->manager->setTextTiles($labyrinth, $tiles);
 
-        $start = $labyrinth->getStart();
+        $start = $this->manager->getStart($labyrinth);
         $start->setCounter(1);
         $this->queue->push($start);
 
         $endTile = $this->stepForward($labyrinth);
-        $labyrinth->markWinningPath($endTile);
+        $this->manager->markWinningPath($labyrinth, $endTile);
 
         return $labyrinth;
     }
@@ -62,7 +71,7 @@ class Solver
             return $tile;
         }
 
-        $paths = $labyrinth->getPossiblePaths($tile);
+        $paths = $this->manager->getPossiblePaths($labyrinth, $tile);
         foreach ($paths as $path) {
 
             $path->setCounter($tile->getCounter()+1);

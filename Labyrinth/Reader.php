@@ -1,9 +1,6 @@
 <?php
 namespace Ps\LabyrinthBundle\Labyrinth;
 
-use Ps\LabyrinthBundle\Model\Labyrinth;
-use Ps\LabyrinthBundle\Factory\TileFactory;
-
 /**
  * Class Reader
  * @package Ps\LabyrinthBundle\Labyrinth
@@ -11,22 +8,9 @@ use Ps\LabyrinthBundle\Factory\TileFactory;
 class Reader
 {
     /**
-     * @var TileFactory
-     */
-    private $tileFactory;
-
-    /**
-     * @param TileFactory $tileFactory
-     */
-    public function __construct(TileFactory $tileFactory)
-    {
-        $this->tileFactory = $tileFactory;
-    }
-
-    /**
-     * Reads given file and returns a Labyrinth model object
+     * Reads given file and returns an array
      * @param string $filePath
-     * @return Labyrinth
+     * @return array
      */
     public function getLabyrinth($filePath)
     {
@@ -37,9 +21,6 @@ class Reader
             $tiles[] = trim($line);
         }
 
-        $labyrinth = new Labyrinth($this->tileFactory);
-        $labyrinth->setTiles($tiles);
-
-        return $labyrinth;
+        return $tiles;
     }
 } 
